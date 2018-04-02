@@ -1,0 +1,73 @@
+mHealth_subject1 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject1.log", sep="", header = TRUE)
+mHealth_subject2 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject2.log", sep="", header = TRUE)
+mHealth_subject3 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject3.log", sep="", header = TRUE)
+mHealth_subject4 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject4.log", sep="", header = TRUE)
+mHealth_subject5 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject5.log", sep="", header = TRUE)
+mHealth_subject6 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject6.log", sep="", header = TRUE)
+mHealth_subject7 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject7.log", sep="", header = TRUE)
+mHealth_subject8 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject8.log", sep="", header = TRUE)
+mHealth_subject9 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject9.log", sep="", header = TRUE)
+mHealth_subject10 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject10.log", sep="", header = TRUE)
+
+mHealth_subject1$subject_id <- rep("1", length(mHealth_subject1$accel_chest_x))
+mHealth_subject2$subject_id <- rep("2", length(mHealth_subject2$accel_chest_x))
+mHealth_subject3$subject_id <- rep("3", length(mHealth_subject3$accel_chest_x))
+mHealth_subject4$subject_id <- rep("4", length(mHealth_subject4$accel_chest_x))
+mHealth_subject5$subject_id <- rep("5", length(mHealth_subject5$accel_chest_x))
+mHealth_subject6$subject_id <- rep("6", length(mHealth_subject6$accel_chest_x))
+mHealth_subject7$subject_id <- rep("7", length(mHealth_subject7$accel_chest_x))
+mHealth_subject8$subject_id <- rep("8", length(mHealth_subject8$accel_chest_x))
+mHealth_subject9$subject_id <- rep("9", length(mHealth_subject9$accel_chest_x))
+mHealth_subject10$subject_id <- rep("10", length(mHealth_subject10$accel_chest_x))
+
+
+mHealth <- rbind(mHealth_subject1, mHealth_subject2)
+mHealth <- rbind(mHealth, mHealth_subject3)
+mHealth <- rbind(mHealth, mHealth_subject4)
+mHealth <- rbind(mHealth, mHealth_subject5)
+mHealth <- rbind(mHealth, mHealth_subject6)
+mHealth <- rbind(mHealth, mHealth_subject7)
+mHealth <- rbind(mHealth, mHealth_subject8)
+mHealth <- rbind(mHealth, mHealth_subject9)
+mHealth <- rbind(mHealth, mHealth_subject10)
+
+dim(mHealth)
+str(mHealth)
+
+mHealth.test <- mHealth[mHealth$label=="0",]
+mHealth.train <- mHealth[mHealth$label!="0",]
+
+dim(mHealth.test)
+dim(mHealth.train)
+
+table(mHealth.train$label)
+
+library(dplyr)
+
+mHealth.train.sampled.1 <- sample_n(mHealth.train[mHealth.train$label=="1",], 1000)
+mHealth.train.sampled.2 <- sample_n(mHealth.train[mHealth.train$label=="2",], 1000)
+mHealth.train.sampled.3 <- sample_n(mHealth.train[mHealth.train$label=="3",], 1000)
+mHealth.train.sampled.4 <- sample_n(mHealth.train[mHealth.train$label=="4",], 1000)
+mHealth.train.sampled.5 <- sample_n(mHealth.train[mHealth.train$label=="5",], 1000)
+mHealth.train.sampled.6 <- sample_n(mHealth.train[mHealth.train$label=="6",], 1000)
+mHealth.train.sampled.7 <- sample_n(mHealth.train[mHealth.train$label=="7",], 1000)
+mHealth.train.sampled.8 <- sample_n(mHealth.train[mHealth.train$label=="8",], 1000)
+mHealth.train.sampled.9 <- sample_n(mHealth.train[mHealth.train$label=="9",], 1000)
+mHealth.train.sampled.10 <- sample_n(mHealth.train[mHealth.train$label=="10",], 1000)
+mHealth.train.sampled.11 <- sample_n(mHealth.train[mHealth.train$label=="11",], 1000)
+mHealth.train.sampled.12 <- sample_n(mHealth.train[mHealth.train$label=="12",], 1000)
+
+mHealth.train.sampled <- rbind(mHealth.train.sampled.1, mHealth.train.sampled.2)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.3)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.4)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.5)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.6)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.7)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.8)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.9)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.10)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.11)
+mHealth.train.sampled <- rbind(mHealth.train.sampled, mHealth.train.sampled.12)
+
+dim(mHealth.train.sampled)
+table(mHealth.train.sampled$label)
