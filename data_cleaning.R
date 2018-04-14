@@ -68,8 +68,10 @@ dim(mHealth.test.unknown.labels)
 dim(mHealth.known.labels)
 
 
+library(splitstackshape)
+
 # Stratified sample for our training set.
-mHealth.train <- stratified(mHealth.known.labels, c("subject_id", "label"), 1000)
+mHealth.train <- stratified(mHealth.known.labels, c("subject_id", "label"), 100)
 unique(mHealth.train$label)
 # [1]  1  2  3  4  5  6  7  8  9 10 11 12
 unique(mHealth.train$subject_id)
@@ -77,7 +79,7 @@ unique(mHealth.train$subject_id)
  
 
 # Stratified sample for our test set. 
-mHealth.test <- stratified(mHealth.known.labels, c("subject_id", "label"), 1000)
+mHealth.test <- stratified(mHealth.known.labels, c("subject_id", "label"), 100)
 unique(mHealth.test$label)
 # [1]  1  2  3  4  5  6  7  8  9 10 11 12
 unique(mHealth.test$subject_id)
