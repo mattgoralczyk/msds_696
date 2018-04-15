@@ -382,6 +382,32 @@ xgb.ggplot.importance(xg.1.imp.matrix)
 
 
 
+#
+# SVM
+#
+svm.1 <- svm(as.factor(mHealth.train$label)~., data=mHealth.train[,1:23])
+svm.1.predict <- predict(svm.1, newdata=mHealth.test)
+svm.1.prediction <- matrix(svm.1.predict, nrow=12, ncol=length(svm.1.predict)/12)
+confusionMatrix(svm.1.matrx, as.factor(mHealth.test$label))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
