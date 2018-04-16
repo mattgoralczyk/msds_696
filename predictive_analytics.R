@@ -388,11 +388,269 @@ xgb.ggplot.importance(xg.1.imp.matrix)
 svm.1 <- svm(as.factor(mHealth.train$label)~., data=mHealth.train[,1:23])
 svm.1.predict <- predict(svm.1, newdata=mHealth.test)
 svm.1.prediction <- matrix(svm.1.predict, nrow=12, ncol=length(svm.1.predict)/12)
-confusionMatrix(svm.1.matrx, as.factor(mHealth.test$label))
+confusionMatrix(svm.1.prediction, as.factor(mHealth.test$label))
+C#onfusion Matrix and Statistics
+#
+#          Reference
+#Prediction    1    2    3    4    5    6    7    8    9   10   11   12
+#        1   999    0    0    6    5   92   63   60    0    0    0    0
+#        2     0  999    0    0    6    0    0    0    0    0    0    0
+#        3     0    0 1000    0    0    0    0    0    0    0    0    0
+#        4     1    0    0  970   56    0    0    2    0    0    0    4
+#        5     0    1    0   15  863    6    2   34    2    0    0    3
+#        6     0    0    0    3    8  864   20   17    0    0    0    1
+#        7     0    0    0    0    7    6  899    6    0    0    0    2
+#        8     0    0    0    1   49   32   15  881    5    0    0    0
+#        9     0    0    0    0    1    0    0    0  993    0    0    0
+#        10    0    0    0    0    1    0    0    0    0  922   43    9
+#        11    0    0    0    0    1    0    1    0    0   70  955   24
+#        12    0    0    0    5    3    0    0    0    0    8    2  957
+#
+#Overall Statistics
+#                                         
+#               Accuracy : 0.9418         
+#                 95% CI : (0.9375, 0.946)
+#    No Information Rate : 0.0833         
+#    P-Value [Acc > NIR] : < 2.2e-16      
+#                                         
+#                  Kappa : 0.9365         
+# Mcnemar's Test P-Value : NA             
+#
+#Statistics by Class:
+#
+#                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
+#Sensitivity           0.99900  0.99900  1.00000  0.97000  0.86300  0.86400  0.89900  0.88100  0.99300   0.92200   0.95500   0.95700
+#Specificity           0.97945  0.99945  1.00000  0.99427  0.99427  0.99555  0.99809  0.99073  0.99991   0.99518   0.99127   0.99836
+#Pos Pred Value        0.81551  0.99403  1.00000  0.93901  0.93197  0.94633  0.97717  0.89624  0.99899   0.94564   0.90866   0.98154
+#Neg Pred Value        0.99991  0.99991  1.00000  0.99726  0.98763  0.98773  0.99088  0.98920  0.99936   0.99293   0.99589   0.99610
+#Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
+#Detection Rate        0.08325  0.08325  0.08333  0.08083  0.07192  0.07200  0.07492  0.07342  0.08275   0.07683   0.07958   0.07975
+#Detection Prevalence  0.10208  0.08375  0.08333  0.08608  0.07717  0.07608  0.07667  0.08192  0.08283   0.08125   0.08758   0.08125
+#Balanced Accuracy     0.98923  0.99923  1.00000  0.98214  0.92864  0.92977  0.94855  0.93586  0.99645   0.95859   0.97314   0.97768
 
 
 
+svm.2 <- svm(as.factor(mHealth.train$label)~., data=mHealth.train[,1:23], kernel="radial", gamma=2)
+svm.2.predict <- predict(svm.2, newdata=mHealth.test)
+svm.2.prediction <- matrix(svm.2.predict, nrow=12, ncol=length(svm.2.predict)/12)
+confusionMatrix(svm.2.prediction, as.factor(mHealth.test$label))
+#Confusion Matrix and Statistics
+#
+#          Reference
+#Prediction    1    2    3    4    5    6    7    8    9   10   11   12
+#        1   977    0    0    0    0    0    0    0    0    0    0    0
+#        2     0  989    0    0    0    0    0    0    0    0    0    0
+#        3     0    0  988    0    0    0    0    0    0    0    0    0
+#        4     0    0    0  570    0    0    0    0    0    0    0    0
+#        5     0    0    0    0  348    0    0    0    0    0    0    0
+#        6     0    0    0    0    0  721    9    1    0    0    0    0
+#        7     0    0    0    0    0    6  669    0    0    0    0    0
+#        8     0    0    0    0    0    2    1  646    0    0    0    0
+#        9     0    0    0    0    0    0    0    0  732    0    0    0
+#        10    0    0    0    0    0    0    0    0    0  219    0    0
+#        11   23   11   12  430  652  271  321  353  268  781 1000  817
+#        12    0    0    0    0    0    0    0    0    0    0    0  183
+#
+#Overall Statistics
+#                                          
+#               Accuracy : 0.6702          
+#                 95% CI : (0.6617, 0.6786)
+#    No Information Rate : 0.0833          
+#    P-Value [Acc > NIR] : < 2.2e-16       
+#                                          
+#                  Kappa : 0.6402          
+# Mcnemar's Test P-Value : NA              
+#
+#Statistics by Class:
+#
+#                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
+#Sensitivity           0.97700  0.98900  0.98800  0.57000  0.34800  0.72100  0.66900  0.64600  0.73200   0.21900   1.00000   0.18300
+#Specificity           1.00000  1.00000  1.00000  1.00000  1.00000  0.99909  0.99945  0.99973  1.00000   1.00000   0.64191   1.00000
+#Pos Pred Value        1.00000  1.00000  1.00000  1.00000  1.00000  0.98632  0.99111  0.99538  1.00000   1.00000   0.20247   1.00000
+#Neg Pred Value        0.99791  0.99900  0.99891  0.96238  0.94404  0.97524  0.97077  0.96881  0.97622   0.93371   1.00000   0.93086
+#Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
+#Detection Rate        0.08142  0.08242  0.08233  0.04750  0.02900  0.06008  0.05575  0.05383  0.06100   0.01825   0.08333   0.01525
+#Detection Prevalence  0.08142  0.08242  0.08233  0.04750  0.02900  0.06092  0.05625  0.05408  0.06100   0.01825   0.41158   0.01525
+#Balanced Accuracy     0.98850  0.99450  0.99400  0.78500  0.67400  0.86005  0.83423  0.82286  0.86600   0.60950   0.82095   0.59150
 
+
+svm.3 <- svm(as.factor(mHealth.train$label)~., data=mHealth.train[,1:23], kernel="radial", gamma=1/100)
+svm.3.predict <- predict(svm.3, newdata=mHealth.test)
+svm.3.prediction <- matrix(svm.3.predict, nrow=12, ncol=length(svm.3.predict)/12)
+confusionMatrix(svm.3.prediction, as.factor(mHealth.test$label))
+#Confusion Matrix and Statistics
+#
+#          Reference
+#Prediction    1    2    3    4    5    6    7    8    9   10   11   12
+#        1   999    0    0   44   37  137  106  165    0    0    0    0
+#        2     0  996    0    0   10    0    6    0    0    0    0    1
+#        3     0    0 1000    0    0    0    0    0    0    0    0    0
+#        4     1    0    0  858  142   15   10   22    0    0    0   14
+#        5     0    0    0   67  663   26    5   69    7    0    0   13
+#        6     0    0    0    8   17  799    1   36    0    0    0    1
+#        7     0    4    0    0    7    4  868    3    0    2    0    6
+#        8     0    0    0   13  109   19    3  700   10    0    0    3
+#        9     0    0    0    0    1    0    0    5  983    0    0    0
+#        10    0    0    0    0    4    0    0    0    0  829   71   53
+#        11    0    0    0    1    1    0    0    0    0  132  915   23
+#        12    0    0    0    9    9    0    1    0    0   37   14  886
+#
+#Overall Statistics
+#                                          
+#               Accuracy : 0.8747          
+#                 95% CI : (0.8686, 0.8805)
+#    No Information Rate : 0.0833          
+#    P-Value [Acc > NIR] : < 2.2e-16       
+#                                          
+#                  Kappa : 0.8633          
+# Mcnemar's Test P-Value : NA              
+#
+#Statistics by Class:
+#
+#                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
+#Sensitivity           0.99900  0.99600  1.00000  0.85800  0.66300  0.79900  0.86800  0.70000  0.98300   0.82900   0.91500   0.88600
+#Specificity           0.95555  0.99845  1.00000  0.98145  0.98300  0.99427  0.99764  0.98573  0.99945   0.98836   0.98573   0.99364
+#Pos Pred Value        0.67137  0.98322  1.00000  0.80791  0.78000  0.92691  0.97092  0.81680  0.99393   0.86625   0.85354   0.92678
+#Neg Pred Value        0.99990  0.99964  1.00000  0.98702  0.96978  0.98195  0.98811  0.97308  0.99846   0.98452   0.99222   0.98968
+#Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
+#Detection Rate        0.08325  0.08300  0.08333  0.07150  0.05525  0.06658  0.07233  0.05833  0.08192   0.06908   0.07625   0.07383
+#Detection Prevalence  0.12400  0.08442  0.08333  0.08850  0.07083  0.07183  0.07450  0.07142  0.08242   0.07975   0.08933   0.07967
+#Balanced Accuracy     0.97727  0.99723  1.00000  0.91973  0.82300  0.89664  0.93282  0.84286  0.99123   0.90868   0.95036   0.93982
+
+
+
+svm.4 <- svm(as.factor(mHealth.train$label)~., data=mHealth.train[,1:23], kernel="radial", cost=2)
+svm.4.predict <- predict(svm.4, newdata=mHealth.test)
+svm.4.prediction <- matrix(svm.4.predict, nrow=12, ncol=length(svm.4.predict)/12)
+confusionMatrix(svm.4.prediction, as.factor(mHealth.test$label))
+#Confusion Matrix and Statistics
+#
+#          Reference
+#Prediction    1    2    3    4    5    6    7    8    9   10   11   12
+#        1  1000    0    0    4    4   60   52   31    0    0    0    0
+#        2     0  999    0    0    2    0    0    0    0    0    0    0
+#        3     0    0 1000    0    0    0    0    0    0    0    0    0
+#        4     0    0    0  976   46    0    0    2    0    0    0    4
+#        5     0    1    0   11  888    4    0   25    2    0    0    3
+#        6     0    0    0    4    6  908   16   16    0    0    0    1
+#        7     0    0    0    0    4    2  916    9    0    0    0    1
+#        8     0    0    0    1   43   26   15  917    6    0    0    0
+#        9     0    0    0    0    1    0    0    0  992    0    0    0
+#        10    0    0    0    0    2    0    0    0    0  934   44   10
+#        11    0    0    0    0    0    0    1    0    0   61  954   25
+#        12    0    0    0    4    4    0    0    0    0    5    2  956
+#
+#Overall Statistics
+#                                         
+#               Accuracy : 0.9533         
+#                 95% CI : (0.9494, 0.957)
+#    No Information Rate : 0.0833         
+#    P-Value [Acc > NIR] : < 2.2e-16      
+#                                         
+#                  Kappa : 0.9491         
+# Mcnemar's Test P-Value : NA             
+#
+#Statistics by Class:
+#
+#                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
+#Sensitivity           1.00000  0.99900  1.00000  0.97600  0.88800  0.90800  0.91600  0.91700  0.99200   0.93400   0.95400   0.95600
+#Specificity           0.98627  0.99982  1.00000  0.99527  0.99582  0.99609  0.99855  0.99173  0.99991   0.99491   0.99209   0.99864
+#Pos Pred Value        0.86881  0.99800  1.00000  0.94942  0.95075  0.95478  0.98283  0.90972  0.99899   0.94343   0.91643   0.98455
+#Neg Pred Value        1.00000  0.99991  1.00000  0.99781  0.98988  0.99167  0.99241  0.99245  0.99927   0.99401   0.99580   0.99601
+#Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
+#Detection Rate        0.08333  0.08325  0.08333  0.08133  0.07400  0.07567  0.07633  0.07642  0.08267   0.07783   0.07950   0.07967
+#Detection Prevalence  0.09592  0.08342  0.08333  0.08567  0.07783  0.07925  0.07767  0.08400  0.08275   0.08250   0.08675   0.08092
+#Balanced Accuracy     0.99314  0.99941  1.00000  0.98564  0.94191  0.95205  0.95727  0.95436  0.99595   0.96445   0.97305   0.97732
+
+
+
+svm.5 <- svm(as.factor(mHealth.train$label)~., data=mHealth.train[,1:23], kernel="radial", cost=100)
+svm.5.predict <- predict(svm.5, newdata=mHealth.test)
+svm.5.prediction <- matrix(svm.5.predict, nrow=12, ncol=length(svm.5.predict)/12)
+confusionMatrix(svm.5.prediction, as.factor(mHealth.test$label))
+#Confusion Matrix and Statistics
+#
+#          Reference
+#Prediction    1    2    3    4    5    6    7    8    9   10   11   12
+#        1  1000    0    0    0    2    4    2    0    0    0    0    0
+#        2     0 1000    0    0    3    0    0    0    0    0    0    0
+#        3     0    0 1000    0    0    0    0    0    0    0    0    0
+#        4     0    0    0  987   22    0    0    1    0    0    0    4
+#        5     0    0    0    6  949    4    4   15    0    0    0    2
+#        6     0    0    0    2    2  977    5   13    1    0    0    1
+#        7     0    0    0    0    2    6  986    5    0    0    0    2
+#        8     0    0    0    1   13    9    2  966    4    0    0    0
+#        9     0    0    0    0    1    0    0    0  995    0    0    0
+#        10    0    0    0    0    2    0    0    0    0  944   36   13
+#        11    0    0    0    0    0    0    1    0    0   51  962   26
+#        12    0    0    0    4    4    0    0    0    0    5    2  952
+#
+#Overall Statistics
+#                                          
+#               Accuracy : 0.9765          
+#                 95% CI : (0.9736, 0.9791)
+#    No Information Rate : 0.0833          
+#    P-Value [Acc > NIR] : < 2.2e-16       
+#                                          
+#                  Kappa : 0.9744          
+# Mcnemar's Test P-Value : NA              
+#
+#Statistics by Class:
+#
+#                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
+#Sensitivity           1.00000  1.00000  1.00000  0.98700  0.94900  0.97700  0.98600  0.96600  0.99500   0.94400   0.96200   0.95200
+#Specificity           0.99927  0.99973  1.00000  0.99755  0.99718  0.99782  0.99864  0.99736  0.99991   0.99536   0.99291   0.99864
+#Pos Pred Value        0.99206  0.99701  1.00000  0.97337  0.96837  0.97602  0.98501  0.97085  0.99900   0.94874   0.92500   0.98449
+#Neg Pred Value        1.00000  1.00000  1.00000  0.99882  0.99537  0.99791  0.99873  0.99691  0.99955   0.99491   0.99653   0.99565
+#Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
+#Detection Rate        0.08333  0.08333  0.08333  0.08225  0.07908  0.08142  0.08217  0.08050  0.08292   0.07867   0.08017   0.07933
+#Detection Prevalence  0.08400  0.08358  0.08333  0.08450  0.08167  0.08342  0.08342  0.08292  0.08300   0.08292   0.08667   0.08058
+#Balanced Accuracy     0.99964  0.99986  1.00000  0.99227  0.97309  0.98741  0.99232  0.98168  0.99745   0.96968   0.97745   0.97532
+
+
+
+svm.6 <- svm(as.factor(mHealth.train$label)~., data=mHealth.train[,1:23], kernel="radial", cost=1000)
+svm.6.predict <- predict(svm.6, newdata=mHealth.test)
+svm.6.prediction <- matrix(svm.6.predict, nrow=12, ncol=length(svm.6.predict)/12)
+confusionMatrix(svm.6.prediction, as.factor(mHealth.test$label))
+#Confusion Matrix and Statistics
+#
+#          Reference
+#Prediction    1    2    3    4    5    6    7    8    9   10   11   12
+#        1  1000    0    0    0    2    3    0    2    0    0    0    0
+#        2     0 1000    0    0    3    0    0    0    0    0    0    0
+#        3     0    0 1000    0    0    0    0    0    0    0    0    0
+#        4     0    0    0  984   28    0    0    3    0    0    0    4
+#        5     0    0    0    9  947    5    4   16    0    0    0    2
+#        6     0    0    0    2    1  972    5   12    1    0    0    1
+#        7     0    0    0    0    2    8  987    7    0    0    0    2
+#        8     0    0    0    1   10   12    3  960    4    0    0    0
+#        9     0    0    0    0    1    0    0    0  995    0    0    0
+#        10    0    0    0    0    2    0    0    0    0  944   36   13
+#        11    0    0    0    0    0    0    1    0    0   51  962   26
+#        12    0    0    0    4    4    0    0    0    0    5    2  952
+#
+#Overall Statistics
+#                                         
+#               Accuracy : 0.9752         
+#                 95% CI : (0.9723, 0.978)
+#    No Information Rate : 0.0833         
+#    P-Value [Acc > NIR] : < 2.2e-16      
+#                                         
+#                  Kappa : 0.973          
+# Mcnemar's Test P-Value : NA             
+#
+#Statistics by Class:
+#
+#                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
+#Sensitivity           1.00000  1.00000  1.00000  0.98400  0.94700  0.97200  0.98700  0.96000  0.99500   0.94400   0.96200   0.95200
+#Specificity           0.99936  0.99973  1.00000  0.99682  0.99673  0.99800  0.99827  0.99727  0.99991   0.99536   0.99291   0.99864
+#Pos Pred Value        0.99305  0.99701  1.00000  0.96565  0.96338  0.97787  0.98111  0.96970  0.99900   0.94874   0.92500   0.98449
+#Neg Pred Value        1.00000  1.00000  1.00000  0.99854  0.99519  0.99746  0.99882  0.99637  0.99955   0.99491   0.99653   0.99565
+#Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
+#Detection Rate        0.08333  0.08333  0.08333  0.08200  0.07892  0.08100  0.08225  0.08000  0.08292   0.07867   0.08017   0.07933
+#Detection Prevalence  0.08392  0.08358  0.08333  0.08492  0.08192  0.08283  0.08383  0.08250  0.08300   0.08292   0.08667   0.08058
+#Balanced Accuracy     0.99968  0.99986  1.00000  0.99041  0.97186  0.98500  0.99264  0.97864  0.99745   0.96968   0.97745   0.97532
 
 
 
