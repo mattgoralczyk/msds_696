@@ -381,6 +381,199 @@ xgb.ggplot.importance(xg.1.imp.matrix)
 
 
 
+xgb_params <- list("objective"="multi:softprob", "eval_metric"="mlogloss", "num_class"=12)
+xg.2 <- xgb.train(params=xgb_params, data=mHealth.train.xgb, nrounds=50)
+mHealth.test.xgb <- xgb.DMatrix(data=as.matrix(mHealth.test[,1:23]), label=mHealth.test.xgb.labels)
+xg.2.test.predict <- predict(xg.2, newdata=mHealth.test.xgb)
+xg.2.test.prediction <- matrix(xg.2.test.predict, nrow=12, ncol=length(xg.2.test.predict)/12) %>%
+t() %>%
+data.frame() %>%
+mutate(label=mHealth.test.xgb.labels+1, max_prob=max.col(., "last"))
+confusionMatrix(factor(xg.2.test.prediction$max_prob), factor(xg.2.test.prediction$label), mode="everything")
+#Confusion Matrix and Statistics
+#
+#          Reference
+#Prediction    1    2    3    4    5    6    7    8    9   10   11   12
+#        1   993    0    0    0    0    1    2    1    0    0    0    0
+#        2     2 1000    0    0    0    0    0    0    0    0    0    0
+#        3     0    0 1000    0    0    0    0    0    0    0    0    0
+#        4     0    0    0  993   13    0    0    0    0    1    0    7
+#        5     0    0    0    5  973    3    1    8    0    0    0    0
+#        6     5    0    0    1    0  985    4    8    1    0    0    0
+#        7     0    0    0    0    0    2  993    1    0    0    0    0
+#        8     0    0    0    0    8    9    0  978    2    0    0    4
+#        9     0    0    0    0    0    0    0    3  995    1    1    0
+#        10    0    0    0    1    5    0    0    1    0  943   30   15
+#        11    0    0    0    0    0    0    0    0    0   42  967   11
+#        12    0    0    0    0    1    0    0    0    2   13    2  963
+#
+#Overall Statistics
+#                                          
+#               Accuracy : 0.9819          
+#                 95% CI : (0.9794, 0.9842)
+#    No Information Rate : 0.0833          
+#    P-Value [Acc > NIR] : < 2.2e-16       
+#                                          
+#                  Kappa : 0.9803          
+# Mcnemar's Test P-Value : NA              
+#
+#Statistics by Class:
+#
+#                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
+#Sensitivity           0.99300  1.00000  1.00000  0.99300  0.97300  0.98500  0.99300  0.97800  0.99500   0.94300   0.96700   0.96300
+#Specificity           0.99964  0.99982  1.00000  0.99809  0.99845  0.99827  0.99973  0.99791  0.99955   0.99527   0.99518   0.99836
+#Pos Pred Value        0.99599  0.99800  1.00000  0.97929  0.98283  0.98108  0.99699  0.97702  0.99500   0.94774   0.94804   0.98165
+#Neg Pred Value        0.99936  1.00000  1.00000  0.99936  0.99755  0.99864  0.99936  0.99800  0.99955   0.99482   0.99699   0.99664
+#Precision             0.99599  0.99800  1.00000  0.97929  0.98283  0.98108  0.99699  0.97702  0.99500   0.94774   0.94804   0.98165
+#Recall                0.99300  1.00000  1.00000  0.99300  0.97300  0.98500  0.99300  0.97800  0.99500   0.94300   0.96700   0.96300
+#F1                    0.99449  0.99900  1.00000  0.98610  0.97789  0.98303  0.99499  0.97751  0.99500   0.94536   0.95743   0.97224
+#Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
+#Detection Rate        0.08275  0.08333  0.08333  0.08275  0.08108  0.08208  0.08275  0.08150  0.08292   0.07858   0.08058   0.08025
+#Detection Prevalence  0.08308  0.08350  0.08333  0.08450  0.08250  0.08367  0.08300  0.08342  0.08333   0.08292   0.08500   0.08175
+#Balanced Accuracy     0.99632  0.99991  1.00000  0.99555  0.98573  0.99164  0.99636  0.98795  0.99727   0.96914   0.98109   0.98068
+
+xgb.names <- colnames(mHealth.train[,-1])
+xg.2.imp.matrix <- xgb.importance(feature_names=xgb.names, model=xg.2)
+head(xg.2.imp.matrix)
+#          Feature       Gain      Cover  Frequency
+#1:           ec_1 0.13876153 0.05627032 0.05586434
+#2:  accel_r_arm_z 0.09464612 0.08176027 0.05793688
+#3: gyro_l_ankle_x 0.07824334 0.06248727 0.04879887
+#4:   gyro_r_arm_y 0.07250447 0.06667253 0.05379180
+#5:   gyro_r_arm_z 0.06974321 0.08781868 0.06066886
+#6:  accel_r_arm_y 0.06781192 0.06339070 0.04446538
+xgb.ggplot.importance(xg.2.imp.matrix)
+
+
+xgb_params <- list("objective"="multi:softprob", "eval_metric"="mlogloss", "num_class"=12)
+xg.3 <- xgb.train(params=xgb_params, data=mHealth.train.xgb, nrounds=50, nfold=5)
+mHealth.test.xgb <- xgb.DMatrix(data=as.matrix(mHealth.test[,1:23]), label=mHealth.test.xgb.labels)
+xg.3.test.predict <- predict(xg.3, newdata=mHealth.test.xgb)
+xg.3.test.prediction <- matrix(xg.3.test.predict, nrow=12, ncol=length(xg.3.test.predict)/12) %>%
+t() %>%
+data.frame() %>%
+mutate(label=mHealth.test.xgb.labels+1, max_prob=max.col(., "last"))
+confusionMatrix(factor(xg.3.test.prediction$max_prob), factor(xg.3.test.prediction$label), mode="everything")
+#Confusion Matrix and Statistics
+#
+#          Reference
+#Prediction    1    2    3    4    5    6    7    8    9   10   11   12
+#        1   993    0    0    0    0    1    2    1    0    0    0    0
+#        2     2 1000    0    0    0    0    0    0    0    0    0    0
+#        3     0    0 1000    0    0    0    0    0    0    0    0    0
+#        4     0    0    0  993   13    0    0    0    0    1    0    7
+#        5     0    0    0    5  973    3    1    8    0    0    0    0
+#        6     5    0    0    1    0  985    4    8    1    0    0    0
+#        7     0    0    0    0    0    2  993    1    0    0    0    0
+#        8     0    0    0    0    8    9    0  978    2    0    0    4
+#        9     0    0    0    0    0    0    0    3  995    1    1    0
+#        10    0    0    0    1    5    0    0    1    0  943   30   15
+#        11    0    0    0    0    0    0    0    0    0   42  967   11
+#        12    0    0    0    0    1    0    0    0    2   13    2  963
+#
+#Overall Statistics
+#                                          
+#               Accuracy : 0.9819          
+#                 95% CI : (0.9794, 0.9842)
+#    No Information Rate : 0.0833          
+#    P-Value [Acc > NIR] : < 2.2e-16       
+#                                          
+#                  Kappa : 0.9803          
+# Mcnemar's Test P-Value : NA              
+#
+#Statistics by Class:
+#
+#                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
+#Sensitivity           0.99300  1.00000  1.00000  0.99300  0.97300  0.98500  0.99300  0.97800  0.99500   0.94300   0.96700   0.96300
+#Specificity           0.99964  0.99982  1.00000  0.99809  0.99845  0.99827  0.99973  0.99791  0.99955   0.99527   0.99518   0.99836
+#Pos Pred Value        0.99599  0.99800  1.00000  0.97929  0.98283  0.98108  0.99699  0.97702  0.99500   0.94774   0.94804   0.98165
+#Neg Pred Value        0.99936  1.00000  1.00000  0.99936  0.99755  0.99864  0.99936  0.99800  0.99955   0.99482   0.99699   0.99664
+#Precision             0.99599  0.99800  1.00000  0.97929  0.98283  0.98108  0.99699  0.97702  0.99500   0.94774   0.94804   0.98165
+#Recall                0.99300  1.00000  1.00000  0.99300  0.97300  0.98500  0.99300  0.97800  0.99500   0.94300   0.96700   0.96300
+#F1                    0.99449  0.99900  1.00000  0.98610  0.97789  0.98303  0.99499  0.97751  0.99500   0.94536   0.95743   0.97224
+#Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
+#Detection Rate        0.08275  0.08333  0.08333  0.08275  0.08108  0.08208  0.08275  0.08150  0.08292   0.07858   0.08058   0.08025
+#Detection Prevalence  0.08308  0.08350  0.08333  0.08450  0.08250  0.08367  0.08300  0.08342  0.08333   0.08292   0.08500   0.08175
+#Balanced Accuracy     0.99632  0.99991  1.00000  0.99555  0.98573  0.99164  0.99636  0.98795  0.99727   0.96914   0.98109   0.98068
+
+xgb.names <- colnames(mHealth.train[,-1])
+xg.3.imp.matrix <- xgb.importance(feature_names=xgb.names, model=xg.3)
+head(xg.3.imp.matrix)
+#          Feature       Gain      Cover  Frequency
+#1:           ec_1 0.13876153 0.05627032 0.05586434
+#2:  accel_r_arm_z 0.09464612 0.08176027 0.05793688
+#3: gyro_l_ankle_x 0.07824334 0.06248727 0.04879887
+#4:   gyro_r_arm_y 0.07250447 0.06667253 0.05379180
+#5:   gyro_r_arm_z 0.06974321 0.08781868 0.06066886
+#6:  accel_r_arm_y 0.06781192 0.06339070 0.04446538
+xgb.ggplot.importance(xg.3.imp.matrix)
+
+
+
+xgb_params <- list("objective"="multi:softprob", "eval_metric"="mlogloss", "num_class"=12)
+xg.4 <- xgb.train(params=xgb_params, data=mHealth.train.xgb, nrounds=500, nfold=5)
+mHealth.test.xgb <- xgb.DMatrix(data=as.matrix(mHealth.test[,1:23]), label=mHealth.test.xgb.labels)
+xg.4.test.predict <- predict(xg.4, newdata=mHealth.test.xgb)
+xg.4.test.prediction <- matrix(xg.4.test.predict, nrow=12, ncol=length(xg.4.test.predict)/12) %>%
+t() %>%
+data.frame() %>%
+mutate(label=mHealth.test.xgb.labels+1, max_prob=max.col(., "last"))
+confusionMatrix(factor(xg.4.test.prediction$max_prob), factor(xg.4.test.prediction$label), mode="everything")
+#Confusion Matrix and Statistics
+#
+#          Reference
+#Prediction    1    2    3    4    5    6    7    8    9   10   11   12
+#        1   997    0    0    0    0    2    2    0    0    0    0    0
+#        2     2 1000    0    0    0    0    0    0    0    0    0    0
+#        3     0    0 1000    0    0    0    0    0    0    0    0    0
+#        4     0    0    0  994   13    0    0    2    0    2    0    4
+#        5     0    0    0    5  979    3    1    7    0    0    0    0
+#        6     1    0    0    0    0  989    0    6    1    0    0    0
+#        7     0    0    0    0    0    1  997    1    0    0    0    0
+#        8     0    0    0    0    5    5    0  979    1    0    0    3
+#        9     0    0    0    0    0    0    0    3  996    1    0    0
+#        10    0    0    0    1    3    0    0    0    1  944   24    9
+#        11    0    0    0    0    0    0    0    0    0   41  975   12
+#        12    0    0    0    0    0    0    0    2    1   12    1  972
+#
+#Overall Statistics
+#                                          
+#               Accuracy : 0.9852          
+#                 95% CI : (0.9828, 0.9873)
+#    No Information Rate : 0.0833          
+#    P-Value [Acc > NIR] : < 2.2e-16       
+#                                          
+#                  Kappa : 0.9838          
+# Mcnemar's Test P-Value : NA              
+#
+#Statistics by Class:
+#
+#                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
+#Sensitivity           0.99700  1.00000  1.00000  0.99400  0.97900  0.98900  0.99700  0.97900  0.99600   0.94400   0.97500   0.97200
+#Specificity           0.99964  0.99982  1.00000  0.99809  0.99855  0.99927  0.99982  0.99873  0.99964   0.99655   0.99518   0.99855
+#Pos Pred Value        0.99600  0.99800  1.00000  0.97931  0.98392  0.99198  0.99800  0.98590  0.99600   0.96130   0.94844   0.98381
+#Neg Pred Value        0.99973  1.00000  1.00000  0.99945  0.99809  0.99900  0.99973  0.99809  0.99964   0.99492   0.99772   0.99746
+#Precision             0.99600  0.99800  1.00000  0.97931  0.98392  0.99198  0.99800  0.98590  0.99600   0.96130   0.94844   0.98381
+#Recall                0.99700  1.00000  1.00000  0.99400  0.97900  0.98900  0.99700  0.97900  0.99600   0.94400   0.97500   0.97200
+#F1                    0.99650  0.99900  1.00000  0.98660  0.98145  0.99049  0.99750  0.98244  0.99600   0.95257   0.96154   0.97787
+#Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
+#Detection Rate        0.08308  0.08333  0.08333  0.08283  0.08158  0.08242  0.08308  0.08158  0.08300   0.07867   0.08125   0.08100
+#Detection Prevalence  0.08342  0.08350  0.08333  0.08458  0.08292  0.08308  0.08325  0.08275  0.08333   0.08183   0.08567   0.08233
+#Balanced Accuracy     0.99832  0.99991  1.00000  0.99605  0.98877  0.99414  0.99841  0.98886  0.99782   0.97027   0.98509   0.98527
+
+
+xgb.names <- colnames(mHealth.train[,-1])
+xg.4.imp.matrix <- xgb.importance(feature_names=xgb.names, model=xg.4)
+head(xg.4.imp.matrix)
+#          Feature       Gain      Cover  Frequency
+#1:           ec_1 0.13856572 0.05588976 0.04926370
+#2:  accel_r_arm_z 0.09456201 0.08000330 0.05381860
+#3: gyro_l_ankle_x 0.07819091 0.06162680 0.04868881
+#4:   gyro_r_arm_y 0.07246375 0.06543015 0.05213815
+#5:   gyro_r_arm_z 0.06972215 0.08592416 0.05549905
+#6:  accel_r_arm_y 0.06774394 0.06179392 0.03940211
+xgb.ggplot.importance(xg.4.imp.matrix)
+
 
 #
 # SVM
