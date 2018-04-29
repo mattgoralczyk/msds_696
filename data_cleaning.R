@@ -88,7 +88,11 @@ unique(mHealth.test$label)
 unique(mHealth.test$subject_id)
 # [1] "1"  "10" "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" 
  
- 
+# Stratified sample dimensions. 
+dim(mHealth.train)
+[1] 12000    25
+dim(mHealth.test)
+[1] 12000    25
  
  
  
