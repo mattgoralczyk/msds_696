@@ -79,7 +79,6 @@ unique(mHealth.train$label)
 # [1]  1  2  3  4  5  6  7  8  9 10 11 12
 unique(mHealth.train$subject_id)
 # [1] "1"  "10" "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" 
- 
 
 # Stratified sample for our test set. 
 mHealth.test <- stratified(mHealth.known.labels, c("subject_id", "label"), 100)
