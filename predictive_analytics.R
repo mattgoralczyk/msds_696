@@ -12,6 +12,21 @@ mtry <- 4
 tunegrid <- expand.grid(.mtry=mtry)
 rf_default <- train(as.factor(label)~., data=mHealth.train, method="rf", metric=metric, tuneGrid=tunegrid)
 print(rf_default)
+#Random Forest 
+#
+#12000 samples
+#   24 predictor
+#   12 classes: '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12' 
+#
+#No pre-processing
+#Resampling: Bootstrapped (25 reps) 
+#Summary of sample sizes: 12000, 12000, 12000, 12000, 12000, 12000, ... 
+#Resampling results:
+#
+#  Accuracy   Kappa    
+#  0.9794028  0.9775274
+#
+#Tuning parameter 'mtry' was held constant at a value of 4
 
 library(randomForest)
 # Source: https://machinelearningmastery.com/tune-machine-learning-algorithms-in-r/
@@ -265,56 +280,56 @@ mHealth.test.xgb.labels[mHealth.test.xgb.labels==12] <- 11
 xgb_params <- list("objective"="multi:softprob", "eval_metric"="mlogloss", "num_class"=12)
 mHealth.train.xgb <- xgb.DMatrix(data=as.matrix(mHealth.train[,1:23]), label=mHealth.train.xgb.labels)
 mHealth.test.xgb <- xgb.DMatrix(data=as.matrix(mHealth.test[,1:23]), label=mHealth.test.xgb.labels)
-xg.1 <- xgb.cv(params=xgb_params, data=mHealth.train.xgb, nrounds=50, nfold=5, verbose=FALSE, prediction=TRUE)
+xg.cv <- xgb.cv(params=xgb_params, data=mHealth.train.xgb, nrounds=50, nfold=5, verbose=FALSE, prediction=TRUE)
 
 # https://rpubs.com/mharris/multiclass_xgboost
 
-xg1.prediction <- data.frame(xg.1$pred) %>%
+xg.cv.prediction <- data.frame(xg.cv$pred) %>%
 mutate(max_prob=max.col(., ties.method="last"), label=mHealth.train.xgb.labels+1)
 
-head(xg1.prediction)
-confusionMatrix(factor(xg1.prediction$max_prob), factor(xg1.prediction$label), mode="everything")
+head(xg.cv.prediction)
+confusionMatrix(factor(xg.cv.prediction$max_prob), factor(xg.cv.prediction$label), mode="everything")
 #Confusion Matrix and Statistics
 #
 #          Reference
 #Prediction   1   2   3   4   5   6   7   8   9  10  11  12
-#        1  995   0   0   0   0   1   5   1   0   0   0   0
-#        2    1 999   0   0   0   0   0   0   0   0   0   0
-#        3    0   0 999   0   0   0   0   0   0   0   1   1
-#        4    0   0   0 989  16   0   0   0   0   0   0   7
-#        5    1   1   0   8 961   4   0  12   1   0   0   1
-#        6    2   0   0   1   2 986   1   5   0   0   0   1
-#        7    1   0   0   0   0   7 992   8   0   0   0   0
-#        8    0   0   0   1  13   2   2 971   2   0   0   0
-#        9    0   0   0   0   1   0   0   0 996   0   1   0
-#        10   0   0   1   0   4   0   0   0   1 951  27  20
-#        11   0   0   0   1   1   0   0   0   0  40 963  13
-#        12   0   0   0   0   2   0   0   3   0   9   8 957
+#        1  994   0   0   0   0   2   5   1   0   0   0   0
+#        2    0 999   1   0   0   0   0   0   0   0   0   0
+#        3    0   0 999   0   0   0   0   0   0   0   0   0
+#        4    0   0   0 991  17   0   0   0   0   0   0   5
+#        5    1   1   0   8 963   4   0  11   1   0   0   0
+#        6    2   0   0   1   2 983   2   7   0   0   0   1
+#        7    2   0   0   0   0   6 990   9   0   1   0   0
+#        8    1   0   0   0  12   5   3 971   2   0   0   0
+#        9    0   0   0   0   0   0   0   0 996   1   1   0
+#        10   0   0   0   0   1   0   0   0   1 932  33  16
+#        11   0   0   0   0   2   0   0   0   0  53 957  17
+#        12   0   0   0   0   3   0   0   1   0  13   9 961
 #
 #Overall Statistics
 #                                          
-#               Accuracy : 0.9799          
-#                 95% CI : (0.9772, 0.9824)
+#               Accuracy : 0.978           
+#                 95% CI : (0.9752, 0.9805)
 #    No Information Rate : 0.0833          
 #    P-Value [Acc > NIR] : < 2.2e-16       
 #                                          
-#                  Kappa : 0.9781          
+#                  Kappa : 0.976           
 # Mcnemar's Test P-Value : NA              
 #
 #Statistics by Class:
 #
 #                     Class: 1 Class: 2 Class: 3 Class: 4 Class: 5 Class: 6 Class: 7 Class: 8 Class: 9 Class: 10 Class: 11 Class: 12
-#Sensitivity           0.99500  0.99900  0.99900  0.98900  0.96100  0.98600  0.99200  0.97100  0.99600   0.95100   0.96300   0.95700
-#Specificity           0.99936  0.99991  0.99982  0.99791  0.99745  0.99891  0.99855  0.99818  0.99982   0.99518   0.99500   0.99800
-#Pos Pred Value        0.99301  0.99900  0.99800  0.97727  0.97169  0.98798  0.98413  0.97982  0.99800   0.94721   0.94597   0.97753
-#Neg Pred Value        0.99955  0.99991  0.99991  0.99900  0.99646  0.99873  0.99927  0.99737  0.99964   0.99554   0.99663   0.99610
-#Precision             0.99301  0.99900  0.99800  0.97727  0.97169  0.98798  0.98413  0.97982  0.99800   0.94721   0.94597   0.97753
-#Recall                0.99500  0.99900  0.99900  0.98900  0.96100  0.98600  0.99200  0.97100  0.99600   0.95100   0.96300   0.95700
-#F1                    0.99401  0.99900  0.99850  0.98310  0.96631  0.98699  0.98805  0.97539  0.99700   0.94910   0.95441   0.96716
+#Sensitivity           0.99400  0.99900  0.99900  0.99100  0.96300  0.98300  0.99000  0.97100  0.99600   0.93200   0.95700   0.96100
+#Specificity           0.99927  0.99991  1.00000  0.99800  0.99764  0.99864  0.99836  0.99791  0.99982   0.99536   0.99345   0.99764
+#Pos Pred Value        0.99202  0.99900  1.00000  0.97828  0.97371  0.98497  0.98214  0.97686  0.99800   0.94812   0.93003   0.97366
+#Neg Pred Value        0.99945  0.99991  0.99991  0.99918  0.99664  0.99845  0.99909  0.99737  0.99964   0.99383   0.99608   0.99646
+#Precision             0.99202  0.99900  1.00000  0.97828  0.97371  0.98497  0.98214  0.97686  0.99800   0.94812   0.93003   0.97366
+#Recall                0.99400  0.99900  0.99900  0.99100  0.96300  0.98300  0.99000  0.97100  0.99600   0.93200   0.95700   0.96100
+#F1                    0.99301  0.99900  0.99950  0.98460  0.96833  0.98398  0.98606  0.97392  0.99700   0.93999   0.94332   0.96729
 #Prevalence            0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333  0.08333   0.08333   0.08333   0.08333
-#Detection Rate        0.08292  0.08325  0.08325  0.08242  0.08008  0.08217  0.08267  0.08092  0.08300   0.07925   0.08025   0.07975
-#Detection Prevalence  0.08350  0.08333  0.08342  0.08433  0.08242  0.08317  0.08400  0.08258  0.08317   0.08367   0.08483   0.08158
-#Balanced Accuracy     0.99718  0.99945  0.99941  0.99345  0.97923  0.99245  0.99527  0.98459  0.99791   0.97309   0.97900   0.97750
+#Detection Rate        0.08283  0.08325  0.08325  0.08258  0.08025  0.08192  0.08250  0.08092  0.08300   0.07767   0.07975   0.08008
+#Detection Prevalence  0.08350  0.08333  0.08325  0.08442  0.08242  0.08317  0.08400  0.08283  0.08317   0.08192   0.08575   0.08225
+#Balanced Accuracy     0.99664  0.99945  0.99950  0.99450  0.98032  0.99082  0.99418  0.98445  0.99791   0.96368   0.97523   0.97932
 
 
 xgb_params <- list("objective"="multi:softprob", "eval_metric"="mlogloss", "num_class"=12)
@@ -582,7 +597,7 @@ svm.1 <- svm(as.factor(mHealth.train$label)~., data=mHealth.train[,1:23])
 svm.1.predict <- predict(svm.1, newdata=mHealth.test)
 svm.1.prediction <- matrix(svm.1.predict, nrow=12, ncol=length(svm.1.predict)/12)
 confusionMatrix(svm.1.prediction, as.factor(mHealth.test$label))
-C#onfusion Matrix and Statistics
+#Confusion Matrix and Statistics
 #
 #          Reference
 #Prediction    1    2    3    4    5    6    7    8    9   10   11   12
