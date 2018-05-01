@@ -1,3 +1,5 @@
+# Author: Matthew Goralczyk
+
 # Correlations by activity
 corrgram(mHealth.train, main="Corrgram - All Activities")
 corrgram(mHealth.train[mHealth.train$label=="1",], main="Corrgram - Activity 1")
