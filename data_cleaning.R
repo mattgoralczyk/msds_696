@@ -1,3 +1,5 @@
+# Author: Matthew Goralczyk
+
 # Read the data.
 mHealth.subject1 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject1.log", sep="", header = TRUE)
 mHealth.subject2 <- read.csv("D:/msds696/MHEALTHDATASET/MHEALTHDATASET/mHealth_subject2.log", sep="", header = TRUE)
